@@ -4,6 +4,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics.SymbolStore;
 
 namespace ConsoleApp1;
 
@@ -148,13 +149,14 @@ public class Firm
     // методы
     public void AddCont(Contact new_contact)
     {
-        _contacts.Add(new_contact);
+        _contacts.Add(new_contact.Clone());
+        AddContToSbFirm(new_contact);
     }
 
     public void AddContToSbFirm(Contact new_contact)
     {
         foreach (SubFirm cur_sub in _sbFirms)
-            cur_sub.AddCont(new_contact);
+            cur_sub.AddCont(new_contact.Clone());
     }
 
     public void AddField(string field_name, string value)
@@ -201,13 +203,53 @@ public class Firm
         _usrFields = new Dictionary<string, string>();
         _sbFirms = new List<SubFirm>();
         _contacts = new List<Contact>();
+        SubFirm sub_main = new SubFirm
+        {
+            SbFirmtpy = new SbFirmType { IsMain = true, Name = "Основной оффис" }
+        };
+        _sbFirms.Add(sub_main);
     }
 
-    public Firm(Dictionary<string, string> _newDictionary)
+    public Firm(List<string> _newList)
     {
-        _usrFields = _newDictionary;
+        _usrFields = new Dictionary<string, string>();
+        foreach (string key in _newList)
+        {
+            _usrFields.Add(key, "");
+        }
         _sbFirms = new List<SubFirm>();
         _contacts = new List<Contact>();
+        SubFirm sub_main = new SubFirm
+        {
+            SbFirmtpy = new SbFirmType { IsMain = true, Name = "Основной оффис" }
+        };
+        _sbFirms.Add(sub_main);
+    }
+
+    public SubFirm GetSubFirmByType(SbFirmType type)
+    {
+        SubFirm subFirm = null;
+        foreach (var sub in _sbFirms)
+        {
+            if(sub.SbFirmtpy.IsMain == type.IsMain && sub.SbFirmtpy.Name == type.Name)
+            {
+                subFirm = sub;
+                break;
+            }
+        }
+        return subFirm;
+    }
+
+    public SubFirm GetMainSubFirm()
+    {
+        foreach (var sub in _sbFirms)
+        {
+            if (sub.SbFirmtpy.IsMain)
+            {
+                return sub;
+            }
+        }
+        return null;
     }
 
     //получение полей

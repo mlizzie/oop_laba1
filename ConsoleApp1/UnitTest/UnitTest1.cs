@@ -7,6 +7,26 @@ namespace UnitTest
     public class UnitTest1
     {
         [TestMethod]
+        public void CreateFirm_test()
+        {
+            FirmFactory firmFactory = new FirmFactory();
+            Firm firm = firmFactory.Create();
+            Assert.IsNotNull(firm);
+        }
+
+        [TestMethod]
+        public void FirmFields_test()
+        {
+            FirmFactory firmFactory = new FirmFactory();
+            Firm firm = firmFactory.Create();
+            List<string> list = firmFactory.flds;
+            foreach (string field in list)
+            {
+                Assert.IsNotNull(firm._usrFields[field]);
+            }
+        }
+
+        [TestMethod]
         public void AddToSbFirm_test() //добавление подразделения 
         {
             ConsoleApp1.Firm test = new ConsoleApp1.Firm();
