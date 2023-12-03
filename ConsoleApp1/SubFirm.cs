@@ -1,103 +1,95 @@
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
     public class SubFirm
     {
-        private string bossName;
-        private string email;
-        private string name;
-        private string ofcBossName;
-        private string tel;
-
-        public List<Contact> contacts { get; set; }
-        public SbFirmType SbFirmtpy { get; set; }
-
-        public string BossName
-        {
-            get
-            {
-                return bossName;
-            }
-            set
-            {
-                bossName = value;
-            }
-        }
-
-        public string Email
-        {
-            get
-            {
-                return email;
-            }
-            set
-            {
-                email = value;
-            }
-        }
+        private string _name;
+        private string _bossName;
+        private string _ofcBossName;
+        private string _tel;
+        private string _email;
+        private SbFirmType _tpy;
+        private List<Contact> _conts;
 
         public string Name
         {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        public string BossName
+        {
+            get { return _bossName; }
+            set { _bossName = value; }
         }
 
         public string OfcBossName
         {
-            get
-            {
-                return ofcBossName;
-            }
-            set
-            {
-                ofcBossName = value;
-            }
+            get { return _ofcBossName; }
+            set { _ofcBossName = value; }
         }
 
         public string Tel
         {
-            get
-            {
-                return tel;
-            }
-            set
-            {
-                tel = value;
-            }
+            get { return _tel; }
+            set { _tel = value; }
         }
 
-        public void AddCont(Contact new_contact)
+        public string Email
         {
-            contacts.Add(new_contact);
+            get { return _email; }
+            set { _email = value; }
         }
 
-        public bool ExistContact(Contact contact_for_search)
+        public SbFirmType SbFirmTpy
         {
-            foreach (Contact cur_contact in contacts)
-            {
-                if (cur_contact == contact_for_search)
-                    return true;
-            }
-            return false;
+            get { return _tpy; }
+            set { _tpy = value; }
         }
 
-        public bool isYourType(SbFirmType _type)
+        public List<Contact> Conts
         {
-            if (SbFirmtpy.IsMain == _type.IsMain)
-            {
-                return true;
-            }
-            return false;
+            get { return _conts; }
+            set { _conts = value; }
         }
 
-        public SubFirm()
+        public int CountCont
         {
-            contacts = new List<Contact>();
+            get { return _conts?.Count ?? 0; }
+        }
+
+        public bool IsMain
+        {
+            get { return _tpy?.IsMain ?? false; }
+        }
+
+        // Конструктор класса
+        public SubFirm(string name, string bossName, string ofcBossName, string tel, string email, SbFirmType tpy)
+        {
+            _name = name;
+            _bossName = bossName;
+            _ofcBossName = ofcBossName;
+            _tel = tel;
+            _email = email;
+            _tpy = tpy;
+            _conts = new List<Contact>();
+        }
+
+        // Метод для добавления контакта
+        public void AddCont(Contact contact)
+        {
+            _conts.Add(contact);
+        }
+
+        // Метод для проверки существования контакта
+        public bool ExistContact(Contact contact)
+        {
+            return _conts.Any(c => c == contact);
+        }
+
+        // Метод для проверки принадлежности типу фирмы
+        public bool IsYourType(SbFirmType type)
+        {
+            return _tpy == type;
         }
     }
 }

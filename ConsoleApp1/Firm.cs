@@ -1,271 +1,233 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics.SymbolStore;
 
-namespace ConsoleApp1;
-
-
-
-public class Firm
+namespace ConsoleApp1
 {
-
-    public Dictionary<string, string> _usrFields;
-    public List<SubFirm> _sbFirms;
-    public List<Contact> _contacts;
-
-
-    private string country;
-    private string email;
-    private string dateIn;
-    private string name;
-    private string region;
-    private string postInx;
-    private string street;
-    private string town;
-    private string web;
-
-    public string Country
+    public class Firm
     {
-        get
+        private string _name;
+        private string _shname;
+        private string _country;
+        private string _region;
+        private string _town;
+        private string _street;
+        private string _postInx;
+        private DateTime _dateIn;
+        private string _email;
+        private string _web;
+        private List<SubFirm> _sbFirms;
+        private Dictionary<string, string> _usrFields;
+
+        public string Name
         {
-            return country;
+            get { return _name; }
+            set { _name = value; }
         }
-        set
+
+        public string Shname
         {
-            country = value;
+            get { return _shname; }
+            set { _shname = value; }
         }
-    }
 
-    public string Email
-    {
-        get
+        public string Country
         {
-            return email;
+            get { return _country; }
+            set { _country = value; }
         }
-        set
+
+        public string Region
         {
-            email = value;
+            get { return _region; }
+            set { _region = value; }
         }
-    }
 
-    public string DateIn
-    {
-        get
+        public string Town
         {
-            return dateIn;
+            get { return _town; }
+            set { _town = value; }
         }
-        set
+
+        public string Street
         {
-            dateIn = value;
+            get { return _street; }
+            set { _street = value; }
         }
-    }
 
-    public string Name
-    {
-        get
+        public string PostInx
         {
-            return name;
+            get { return _postInx; }
+            set { _postInx = value; }
         }
-        set
+
+        public DateTime DateIn
         {
-            name = value;
+            get { return _dateIn; }
+            set { _dateIn = value; }
         }
-    }
 
-    public string Region
-    {
-        get
+        public string Email
         {
-            return region;
+            get { return _email; }
+            set { _email = value; }
         }
-        set
+
+        public string Web
         {
-            region = value;
+            get { return _web; }
+            set { _web = value; }
         }
-    }
 
-    public string PostInx
-    {
-        get
+        public List<SubFirm> SbFirms
         {
-            return postInx;
+            get { return _sbFirms; }
+            set { _sbFirms = value; }
         }
-        set
+
+        public int SbFirmsCount
         {
-            postInx = value;
+            get { return _sbFirms?.Count ?? 0; }
         }
-    }
 
-    public string Street
-    {
-        get
+        // Индексатор для доступа к пользовательским полям
+        public string this[string key]
         {
-            return street;
-        }
-        set
-        {
-            street = value;
-        }
-    }
-
-    public string Town
-    {
-        get
-        {
-            return town;
-        }
-        set
-        {
-            town = value;
-        }
-    }
-
-    public string Web
-    {
-        get
-        {
-            return web;
-        }
-        set
-        {
-            web = value;
-        }
-    }
-
-    public int SbFirmsCount
-    {
-        get { return _sbFirms.Count; }
-    }
-    public SubFirm this[int index]
-    {
-        get { return _sbFirms[index]; }
-        set { _sbFirms[index] = value; }
-    }
-
-    // методы
-    public void AddCont(Contact new_contact)
-    {
-        _contacts.Add(new_contact.Clone());
-        AddContToSbFirm(new_contact);
-    }
-
-    public void AddContToSbFirm(Contact new_contact)
-    {
-        foreach (SubFirm cur_sub in _sbFirms)
-            cur_sub.AddCont(new_contact.Clone());
-    }
-
-    public void AddField(string field_name, string value)
-    {
-        _usrFields.Add(field_name, value);
-    }
-
-    public void AddSbFirm(SubFirm new_sub_firm)
-    {
-        _sbFirms.Add(new_sub_firm);
-    }
-
-    public bool ExistContact(Contact contact_for_search)
-    {
-        foreach (Contact cur_contact in _contacts)
-            if (cur_contact == contact_for_search)
-                return true;
-        return false;
-    }
-
-    public string GetField(string key)
-    {
-        string value;
-        _usrFields.TryGetValue(key, out value);
-        return value;
-    }
-
-    public void RenameField(string old_key, string new_key)
-    {
-        string value;
-        _usrFields.TryGetValue(old_key, out value);
-        _usrFields.Remove(old_key);
-        _usrFields.Add(new_key, value);
-    }
-
-    public void SetField(string field_name, string value)
-    {
-        _usrFields.Remove(field_name);
-        _usrFields.Add(field_name, value);
-    }
-
-    public Firm()
-    {
-        _usrFields = new Dictionary<string, string>();
-        _sbFirms = new List<SubFirm>();
-        _contacts = new List<Contact>();
-        SubFirm sub_main = new SubFirm
-        {
-            SbFirmtpy = new SbFirmType { IsMain = true, Name = "Основной оффис" }
-        };
-        _sbFirms.Add(sub_main);
-    }
-
-    public Firm(List<string> _newList)
-    {
-        _usrFields = new Dictionary<string, string>();
-        foreach (string key in _newList)
-        {
-            _usrFields.Add(key, "");
-        }
-        _sbFirms = new List<SubFirm>();
-        _contacts = new List<Contact>();
-        SubFirm sub_main = new SubFirm
-        {
-            SbFirmtpy = new SbFirmType { IsMain = true, Name = "Основной оффис" }
-        };
-        _sbFirms.Add(sub_main);
-    }
-
-    public SubFirm GetSubFirmByType(SbFirmType type)
-    {
-        SubFirm subFirm = null;
-        foreach (var sub in _sbFirms)
-        {
-            if(sub.SbFirmtpy.IsMain == type.IsMain && sub.SbFirmtpy.Name == type.Name)
+            get
             {
-                subFirm = sub;
-                break;
+                return _usrFields[key];
+            }
+            set
+            {
+                _usrFields[key] = value;
             }
         }
-        return subFirm;
-    }
 
-    public SubFirm GetMainSubFirm()
-    {
-        foreach (var sub in _sbFirms)
+        // Конструктор класса
+        public Firm()
         {
-            if (sub.SbFirmtpy.IsMain)
+            _sbFirms = new List<SubFirm>();
+            _usrFields = new Dictionary<string, string>();
+
+            // Создаем основной офис при создании фирмы
+            SbFirmType sb = new SbFirmType
             {
-                return sub;
+                IsMain = true,
+                Name = "Основной офис"
+            };
+            SubFirm mainOffice = new SubFirm("Основной офис", "", "", "", "", sb);
+
+            // Добавляем основной офис в список подразделений фирмы
+            _sbFirms.Add(mainOffice);
+        }
+
+        public Firm(List<string> _newList)
+        {
+            _sbFirms = new List<SubFirm>();
+            _usrFields = new Dictionary<string, string>();
+
+            // Создаем основной офис при создании фирмы
+            SbFirmType sb = new SbFirmType
+            {
+                IsMain = true,
+                Name = "Основной офис"
+            };
+            SubFirm mainOffice = new SubFirm("Основной офис", "", "", "", "", sb);
+            // Добавляем основной офис в список подразделений фирмы
+            _sbFirms.Add(mainOffice);
+            foreach (string key in _newList)
+            {
+                _usrFields.Add(key, "");
             }
         }
-        return null;
-    }
 
-    //получение полей
-    public string[] GetMain()
-    {
-        string[] result = new string[9];
-        result[0] = country;
-        result[1] = dateIn;
-        result[2] = email;
-        result[3] = name;
-        result[4] = postInx;
-        result[5] = region;
-        result[6] = street;
-        result[7] = town;
-        result[8] = web;
-        return result;
+
+        // Метод для добавления контакта в фирму
+        public void AddCont(Contact contact)
+        {
+            SubFirm mainOffice = GetMain();
+            // Добавление контакта в основной офис
+            mainOffice.AddCont(contact);
+            // Клонирование контакта для каждого подразделения
+            foreach (var subFirm in _sbFirms.Where(sf => !sf.IsMain))
+            {
+                AddContToSbFirm(contact, subFirm);
+            }
+        }
+
+        // Метод для добавления контакта в подразделение фирмы
+        public void AddContToSbFirm(Contact contact, SubFirm subFirm)
+        {
+            subFirm.AddCont((Contact)contact.Clone());
+        }
+
+        // Метод для проверки существования контакта в фирме
+        public bool ExistContact(Contact contact)
+        {
+            SubFirm mainOffice = GetMain();
+            return mainOffice.ExistContact(contact);
+        }
+
+        // Метод для получения подразделения по имени
+        public SubFirm GetSubFirm(string subFirmName)
+        {
+            return _sbFirms.FirstOrDefault(sf => sf.Name == subFirmName);
+        }
+
+        // Метод для получения значения поля из пользовательских полей
+        public string GetField(string key)
+        {
+            return _usrFields.ContainsKey(key) ? _usrFields[key] : null;
+        }
+
+        // Метод для получения основного подразделения (главного офиса)
+        public SubFirm GetMain()
+        {
+            return _sbFirms.FirstOrDefault(sf => sf.IsMain);
+        }
+
+        // Метод для переименования поля в пользовательских полях
+        public void RenameField(string oldKey, string newKey)
+        {
+            if (_usrFields.ContainsKey(oldKey))
+            {
+                string value = _usrFields[oldKey];
+                _usrFields.Remove(oldKey);
+                _usrFields[newKey] = value;
+            }
+        }
+
+        // Метод для установки значения поля в пользовательских полях
+        public void SetField(string key, string value)
+        {
+            _usrFields[key] = value;
+        }
+
+        public void AddSbFirm(SubFirm new_sub_firm)
+        {
+            _sbFirms.Add(new_sub_firm);
+        }
+
+        public SubFirm GetSubFirmByType(SbFirmType type)
+        {
+            SubFirm subFirm = null;
+            foreach (var sub in _sbFirms)
+            {
+                if (sub.IsMain == type.IsMain && sub.Name == type.Name)
+                {
+                    subFirm = sub;
+                    break;
+                }
+            }
+            return subFirm;
+        }
+
+        public void AddField(string field_name, string value)
+        {
+            _usrFields.Add(field_name, value);
+        }
 
     }
 }

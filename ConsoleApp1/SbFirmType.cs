@@ -1,31 +1,22 @@
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
     public class SbFirmType
     {
-        private bool isMain;
-        private string name;
+        // Приватные поля
+        private bool _isMain;
+        private string _name;
+
+        // Свойства для доступа к полям
         public bool IsMain
         {
-            get
-            {
-                return isMain;
-            }
-            set
-            {
-                isMain = value;
-            }
-        }
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
+            get { return _isMain; }
+            set { _isMain = value; }
         }
 
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
     }
 }
